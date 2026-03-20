@@ -36,7 +36,7 @@ public class AdminController {
     public ResponseEntity<ApiResponse<Map<String, Object>>> getDashboard() {
         Map<String, Object> stats = Map.of(
             "totalUsers", userRepository.count(),
-            "totalProducts", productService.getAllActiveProducts(Pageable.unpaged()).getTotalElements(),
+            "totalProducts", productService.getAllActiveProducts().size(),
             "totalShipments", shipmentService.getAllShipments(Pageable.unpaged()).getTotalElements(),
             "totalInquiries", inquiryService.getAllInquiries(Pageable.unpaged()).getTotalElements()
         );

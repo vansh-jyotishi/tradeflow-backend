@@ -6,9 +6,6 @@ import com.tradeflow.backend.entity.Product;
 import com.tradeflow.backend.repository.CategoryRepository;
 import com.tradeflow.backend.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,29 +19,24 @@ public class ProductController {
     private final ProductService productService;
     private final CategoryRepository categoryRepository;
 
-    // ─── Categories ───────────────────────────────────────
-
     @GetMapping("/categories")
     public ResponseEntity<ApiResponse<List<Category>>> getCategories() {
         List<Category> categories = categoryRepository.findByIsActiveTrueOrderBySortOrder();
         return ResponseEntity.ok(ApiResponse.success(categories));
     }
 
-    // ─── Products ─────────────────────────────────────────
-
     @GetMapping("/products")
-    public ResponseEntity<ApiResponse<Page<Product>>> getProducts(
+    public ResponseEntity<ApiResponse<List<Product>>> getProducts(
             @RequestParam(required = false) Long categoryId,
-            @RequestParam(required = false) String search,
-            @PageableDefault(size = 12) Pageable pageable) {
+            @RequestParam(required = false) String search) {
 
-        Page<Product> products;
+        List<Product> products;
         if (search != null && !search.isBlank()) {
-            products = productService.searchProducts(search, pageable);
+            products = productService.searchProducts(search);
         } else if (categoryId != null) {
-            products = productService.getProductsByCategory(categoryId, pageable);
+            products = productService.getProductsByCategory(categoryId);
         } else {
-            products = productService.getAllActiveProducts(pageable);
+            products = productService.getAllActiveProducts();
         }
         return ResponseEntity.ok(ApiResponse.success(products));
     }

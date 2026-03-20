@@ -5,8 +5,6 @@ import com.tradeflow.backend.exception.ResourceNotFoundException;
 import com.tradeflow.backend.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +17,9 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "products", key = "#pageable.pageNumber + '-' + #pageable.pageSize")
-    public Page<Product> getAllActiveProducts(Pageable pageable) {
-        return productRepository.findByIsActiveTrue(pageable);
+    @Cacheable("products")
+    public List<Product> getAllActiveProducts() {
+        return productRepository.findAllActive();
     }
 
     @Transactional(readOnly = true)
@@ -37,8 +35,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Product> getProductsByCategory(Long categoryId, Pageable pageable) {
-        return productRepository.findByCategoryIdAndIsActiveTrue(categoryId, pageable);
+    public List<Product> getProductsByCategory(Long categoryId) {
+        return productRepository.findByCategoryActive(categoryId);
     }
 
     @Transactional(readOnly = true)
@@ -48,8 +46,8 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Product> searchProducts(String query, Pageable pageable) {
-        return productRepository.searchProducts(query, pageable);
+    public List<Product> searchProducts(String query) {
+        return productRepository.searchProducts(query);
     }
 
     @Transactional
@@ -77,7 +75,7 @@ public class ProductService {
     @Transactional
     public void deleteProduct(Long id) {
         Product product = getProductById(id);
-        product.setIsActive(false); // Soft delete
+        product.setIsActive(false);
         productRepository.save(product);
     }
 }

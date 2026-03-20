@@ -61,7 +61,7 @@ public class Product {
     @Builder.Default
     private List<ProductImage> images = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "product_source_regions",
         joinColumns = @JoinColumn(name = "product_id"),
@@ -70,7 +70,7 @@ public class Product {
     @Builder.Default
     private Set<SourceRegion> sourceRegions = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "product_tags",
         joinColumns = @JoinColumn(name = "product_id"),
