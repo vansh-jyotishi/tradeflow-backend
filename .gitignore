@@ -1,0 +1,25 @@
+# Build output
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+*.class
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Maven wrapper downloaded binary
+.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
+
+# Secrets — NEVER commit these
+.env
+*.env.local

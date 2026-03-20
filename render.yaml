@@ -1,0 +1,35 @@
+# ============================================================================
+# Render Blueprint — TradeFlow Backend
+# https://render.com/docs/blueprint-spec
+#
+# DEPLOYMENT STEPS:
+# 1. Push backend to a GitHub repo
+# 2. Go to https://render.com → New → Blueprint
+# 3. Connect your repo → Render reads this file
+# 4. Set the environment variables listed below in Render dashboard
+# ============================================================================
+
+services:
+  - type: web
+    name: tradeflow-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    region: oregon
+    plan: free
+    envVars:
+      # Render auto-sets PORT — Spring Boot picks it up via ${PORT:8080}
+      - key: DATABASE_URL
+        sync: false  # Set manually in Render dashboard
+      - key: DATABASE_USERNAME
+        sync: false
+      - key: DATABASE_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CORS_ORIGINS
+        value: https://vansh-jyotishi.github.io
+      - key: LOG_LEVEL
+        value: INFO
+      - key: HIKARI_MAX_POOL
+        value: "5"
